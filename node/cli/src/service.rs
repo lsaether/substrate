@@ -133,7 +133,7 @@ construct_service_factory! {
 
 				config.custom.grandpa_import_setup = Some((block_import.clone(), link_half));
 
-				import_queue(
+				import_queue::<_, _, _, Pair>(
 					slot_duration,
 					block_import,
 					Some(justification_import),
@@ -144,7 +144,7 @@ construct_service_factory! {
 			}},
 		LightImportQueue = AuraImportQueue<Self::Block>
 			{ |config: &FactoryFullConfiguration<Self>, client: Arc<LightClient<Self>>| {
-					import_queue(
+					import_queue::<_, _, _, Pair>(
 						SlotDuration::get_or_compute(&*client)?,
 						client.clone(),
 						None,

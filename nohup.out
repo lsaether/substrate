@@ -1,0 +1,8 @@
+events.js:167
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event at:
+    at fs.read (fs.js:2167:12)
+    at FSReqWrap.wrapper [as oncomplete] (fs.js:601:17)

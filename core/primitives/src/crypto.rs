@@ -23,6 +23,8 @@ use parity_codec::{Encode, Decode};
 #[cfg(feature = "std")]
 use regex::Regex;
 #[cfg(feature = "std")]
+use std::{fmt::Debug, hash::Hash};
+#[cfg(feature = "std")]
 use base58::{FromBase58, ToBase58};
 
 /// The root phrase for our publically known keys.
@@ -266,9 +268,9 @@ impl<T: AsMut<[u8]> + AsRef<[u8]> + Default + Derive> Ss58Codec for T {
 ///
 /// For now it just specifies how to create a key from a phrase and derivation path.
 #[cfg(feature = "std")]
-pub trait Pair: Sized {
+pub trait Pair: Sized + Send + Sync + 'static {
 	/// TThe type which is used to encode a public key.
-	type Public;
+	type Public: Eq + PartialEq + Clone + Sync + Send + Encode + Decode + Debug + Hash + 'static + AsRef<Self::Public>;
 
 	/// The type used to (minimally) encode the data required to securely create
 	/// a new key pair.
@@ -276,7 +278,7 @@ pub trait Pair: Sized {
 
 	/// The type used to represent a signature. Can be created from a key pair and a message
 	/// and verified with the message and a public key.
-	type Signature;
+	type Signature: Clone;
 
 	/// Error returned from the `derive` function.
 	type DeriveError;
